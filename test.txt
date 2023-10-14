@@ -1,0 +1,58 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+class node{
+    public:
+    int data;
+    node* left;
+    node* right;
+    
+    node(int val){
+        data=val;
+        left= NULL;
+        right= NULL;
+    }
+};
+void insert(node* root, int val){
+    node* temp=root;
+    if(temp==NULL){
+        // cout<<"00"<<endl;
+        temp=new node(val);
+        // cout<<temp->data<<endl;
+        // cout<<temp<<endl;
+        return ;
+    }
+    else if(val>temp->data){
+        // cout<<"11"<<endl;
+        // cout<<temp->data<<endl;
+        // cout<<temp->right<<endl;
+        insert(temp->right, val);
+    }
+    else{
+        insert(temp->left, val);
+        // cout<<"22"<<endl;
+    }
+    return;
+}
+
+int main() {
+    // Write C++ code here
+    node* root= new node(1);
+    root->left= new node(2);
+    root->right= new node(3);
+    root->left->left= new node(1);
+    root->left->right= new node(4);
+    insert(root, 5);
+    // cout<<root<<endl;
+    // cout<<root->left<<endl;
+    // cout<<root->right<<endl;
+    // cout<<root->left->left<<endl;
+    // cout<<root->left->right<<endl;
+    // cout<<root->left->left->left<<endl;
+    // cout<<root->left->left->right<<endl;
+    // cout<<root->left->right->left<<endl;
+    // cout<<root->left->right->right<<endl;
+    // cout<<root->left->left->left<<endl;
+    cout<<root->right->right<<endl;
+    return 0;
+}

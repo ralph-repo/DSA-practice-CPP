@@ -1,0 +1,15 @@
+class Solution{
+  public:
+    int MissingNumber(vector<int>& array, int n) {
+        // Your code goes here
+        int arr[n],i;
+        for(i=0;i<n;i++){
+            arr[array[i]]=0;
+        }
+        for(i=0;i<n;i++){
+            if(arr[i]!=0){
+                break;
+            }
+        }
+        return i;
+};

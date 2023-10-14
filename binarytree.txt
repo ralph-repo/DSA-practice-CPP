@@ -1,0 +1,379 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+template <typename T>
+class btreenode{
+    public:
+    T data;
+    btreenode<T>* left;
+    btreenode<T>* right;
+    
+    btreenode(T data){
+        this->data=data;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    
+    ~btreenode(){
+        delete this->left;
+        delete this->right;
+    }
+};
+btreenode<int>* takeinput(){
+    int rootdata;
+    cout<<"enter the node data: ";
+    cin>>rootdata;
+    if(rootdata==-1){
+        return NULL;
+    }
+    btreenode<int>* root=new btreenode<int>(rootdata);
+    btreenode<int>* leftchild=takeinput();
+    btreenode<int>* rightchild=takeinput();
+    root->left=leftchild;
+    root->right=rightchild;
+    return root;
+}
+btreenode<int>* takeinputlevelwise(){
+    cout<<"enter the root data: ";
+    int rootdata;
+    cin>>rootdata;
+    if(rootdata==-1){
+        return NULL;
+    }
+    btreenode<int>* root=new btreenode<int>(rootdata);
+    queue<btreenode<int>*> levels;
+    levels.push(root);
+    while(levels.size()!=0){
+        btreenode<int>* front=levels.front();
+        levels.pop();
+        cout<<"enter left child of "<<front->data<<": ";
+        int leftchilddata;
+        cin>>leftchilddata;
+        if(leftchilddata!=-1){
+            btreenode<int>* leftchild=new btreenode<int>(leftchilddata);
+            front->left=leftchild;
+            levels.push(leftchild);
+        }
+        cout<<"enter right child of "<<front->data<<": ";
+        int rightchilddata;
+        cin>>rightchilddata;
+        if(rightchilddata!=-1){
+            btreenode<int>* rightchild=new btreenode<int>(rightchilddata);
+            front->right=rightchild;
+            levels.push(rightchild);
+        }
+    }
+    return root;
+}
+void printtree(btreenode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    cout<<root->data<<": ";
+    if(root->left!=NULL){
+        cout<< "L"<<root->left->data<<" ";
+    }
+    if(root->right!=NULL){
+        cout<< "R"<<root->right->data<<" ";
+    }
+    cout<<endl;
+    printtree(root->left);
+    printtree(root->right);
+    return;
+}
+void printtreelevelwise(btreenode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    
+    queue<btreenode<int>*> levels;
+    levels.push(root);
+    while(levels.size()!=0){
+        btreenode<int>* front=levels.front();
+        cout<<front->data<<": ";
+        levels.pop();
+        if(front->left!=NULL){
+            cout<<front->left->data<<", ";
+            levels.push(front->left);
+        }
+        if(front->right!=NULL){
+            cout<<front->right->data<<", ";
+            levels.push(front->right);
+        }
+        
+        cout<<endl;
+    }
+    return;
+}
+int countnodes(btreenode<int>* root){
+    if(root==NULL){
+        return 0;
+    }
+    int ans=1;
+    return ans+countnodes(root->left)+countnodes(root->right);
+}
+int heightbtree(btreenode<int>* root){
+    if(root==NULL){
+        return 0;
+    }
+    int ans=1;
+    return max(ans+heightbtree(root->left),ans+heightbtree(root->right));
+}
+int main() {
+    // Write C++ code here
+    //1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 10 -1 -1
+    btreenode<int>* root = takeinputlevelwise();
+    // btreenode<int>* node1 = new btreenode<int>(2);
+    // btreenode<int>* node2 = new btreenode<int>(3);
+    // root->left=node1;
+    // root->right=node2;
+    // printtree(root);
+    cout<<endl;
+    printtreelevelwise(root);
+    cout<<endl<<"Num Node is: "<<countnodes(root)<<endl;
+    cout<<"height is: "<<heightbtree(root);
+}
+
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+template <typename T>
+class btreenode{
+    public:
+    T data;
+    btreenode<T>* left;
+    btreenode<T>* right;
+    
+    btreenode(T data){
+        this->data=data;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    
+    ~btreenode(){
+        delete this->left;
+        delete this->right;
+    }
+};
+int search(int in[], int st, int end, int curr){
+    for(int i=st;i<=end;i++){
+        if(curr==in[i]){
+            return i;
+        }
+    }
+    return -1;
+}
+btreenode<int>* buildtree(int pre[], int in[], int st, int end){
+    static int idx=0;
+    if(st>end){
+        return NULL;
+    }
+    int rootdata=pre[idx];
+    idx++;
+    btreenode<int>* root= new btreenode<int>(rootdata);
+    if(st==end){
+        return root;
+    }
+    int pos=search(in, st, end,rootdata);
+    
+    root->left= buildtree(pre,in,st, pos-1);
+    root->right= buildtree(pre,in,pos+1,end);
+    return root;
+}
+void printtreelevelwise(btreenode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    
+    queue<btreenode<int>*> levels;
+    levels.push(root);
+    while(levels.size()!=0){
+        btreenode<int>* front=levels.front();
+        cout<<front->data<<": ";
+        levels.pop();
+        if(front->left!=NULL){
+            cout<<front->left->data<<", ";
+            levels.push(front->left);
+        }
+        if(front->right!=NULL){
+            cout<<front->right->data<<", ";
+            levels.push(front->right);
+        }
+        
+        cout<<endl;
+    }
+    return;
+}
+int main() {
+    // Write C++ code here
+    //1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 10 -1 -1
+    int pre[]={25,15,10,4,12,22,18,24,50,35,31,44,70,66,90};
+    int in[]={4,10,12,15,18,22,24,25,31,35,44,50,66,70,90};
+    // btreenode<int>* node1 = new btreenode<int>(2);
+    // btreenode<int>* node2 = new btreenode<int>(3);
+    // root->left=node1;
+    // root->right=node2;
+    // printtree(root);
+    btreenode<int>* root=buildtree(pre,in,0,14);
+    cout<<endl;
+    printtreelevelwise(root);
+}
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+template <typename T>
+class bstnode{
+    public:
+    T data;
+    bstnode<T>* left;
+    bstnode<T>* right;
+    
+    bstnode(T data){
+        this->data=data;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    
+    ~bstnode(){
+        delete this->left;
+        delete this->right;
+    }
+};
+
+bstnode<int>* takeinputlevelwise(){
+    cout<<"enter the root data: ";
+    int rootdata;
+    cin>>rootdata;
+    if(rootdata==-1){
+        return NULL;
+    }
+    bstnode<int>* root=new bstnode<int>(rootdata);
+    queue<bstnode<int>*> levels;
+    levels.push(root);
+    while(levels.size()!=0){
+        bstnode<int>* front=levels.front();
+        levels.pop();
+        cout<<"enter left child of "<<front->data<<": ";
+        int leftchilddata;
+        cin>>leftchilddata;
+        if(leftchilddata!=-1){
+            bstnode<int>* leftchild=new bstnode<int>(leftchilddata);
+            front->left=leftchild;
+            levels.push(leftchild);
+        }
+        cout<<"enter right child of "<<front->data<<": ";
+        int rightchilddata;
+        cin>>rightchilddata;
+        if(rightchilddata!=-1){
+            bstnode<int>* rightchild=new bstnode<int>(rightchilddata);
+            front->right=rightchild;
+            levels.push(rightchild);
+        }
+    }
+    return root;
+}
+int searchbst(bstnode<int>* root, int data){
+    if(root==NULL){
+        return -1;
+    }
+    if(data==root->data){
+        return root->data;
+    }
+    else if(data>root->data){
+        searchbst(root->right, data);
+    }
+    else{
+        searchbst(root->left, data);
+    }
+}
+int maxbst(bstnode<int>* root){
+    if(root==NULL){
+        return INT_MIN;
+    }
+    return max(root->data,max(maxbst(root->right),maxbst(root->right)));
+}
+int minbst(bstnode<int>* root){
+    if(root==NULL){
+        return INT_MAX;
+    }
+    return min(root->data,min(minbst(root->right),minbst(root->right)));
+}
+bool isBST(bstnode<int>* root){
+    if(root==NULL){
+        return true;
+    }
+    else if(root->data<=minbst(root->right) && root->data>=maxbst(root->left) && isBST(root->left) && isBST(root->right)){
+        return true;
+    }
+    else
+    return false;
+    // int rightmin=minbst(root->right);
+    // int leftmax=maxbst(root->left);
+    // bool output=(root->data<=rightmin) && (root->data>=leftmax) && isBST(root->left) && isBST(root->right);
+    // return output;
+}
+void printtreelevelwise(bstnode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    
+    queue<bstnode<int>*> levels;
+    levels.push(root);
+    while(levels.size()!=0){
+        bstnode<int>* front=levels.front();
+        cout<<front->data<<": ";
+        levels.pop();
+        if(front->left!=NULL){
+            cout<<front->left->data<<", ";
+            levels.push(front->left);
+        }
+        if(front->right!=NULL){
+            cout<<front->right->data<<", ";
+            levels.push(front->right);
+        }
+        
+        cout<<endl;
+    }
+    return;
+}
+bstnode<int>* sortedarrayinput(int arr[], int st, int end){
+    if(st>end){
+        return NULL;
+    }
+    int mid=(st+end)/2;
+    bstnode<int>* root = new bstnode<int>(arr[mid]);
+    root->left=sortedarrayinput(arr, st, mid-1);
+    root->right=sortedarrayinput(arr, mid+1, end);
+    return root;
+}
+int main() {
+    // Write C++ code here
+    //5 3 7 1 4 6 8 -1 -1 -1 -1 -1 -1 -1 -1
+    int array[8]={1,2,3,4,5,6,7,8};
+    bstnode<int>* root = sortedarrayinput(array, 0, 7);
+    // bstnode<int>* node1 = new bstnode<int>(2);
+    // bstnode<int>* node2 = new bstnode<int>(3);
+    // root->left=node1;
+    // root->right=node2;
+    // printtree(root);
+    cout<<endl;
+    printtreelevelwise(root);
+    cout<<endl<<searchbst(root, 8)<<" found"<<endl;
+    cout<<isBST(root)<<"  1:is BST 0:is not BST"<<endl;
+}
+

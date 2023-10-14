@@ -1,0 +1,181 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+template <typename T>
+class treenode{
+    public:
+    T data;
+    vector<treenode<T>*> children;
+    
+    treenode(T data){
+        this->data=data;
+    }
+    
+    ~treenode(){
+        for(int i=0;i<this->children.size();i++){
+            delete children[i];
+        }
+    }
+};
+treenode<int>* takeinputlevelwise(){
+    int rootdata;
+    cout<<"enter the data of node: ";
+    cin>>rootdata;
+    treenode<int>* root = new treenode<int>(rootdata);
+    
+    queue<treenode<int>*> pendingnode;
+    pendingnode.push(root);
+    while(pendingnode.size() != 0){
+        treenode<int>* front=pendingnode.front();
+        pendingnode.pop();
+        cout<<"enter the num of children of "<<front->data<<": ";
+        int childnum;
+        cin>>childnum;
+        for(int i=0;i<childnum;i++){
+            int childdata;
+            cout<<"enter "<<i<<"th child  of "<<front->data<<": ";
+            cin>>childdata;
+            treenode<int>* child=new treenode<int>(childdata);
+            front->children.push_back(child);
+            pendingnode.push(child);
+        }
+    }
+    return root;
+}
+treenode<int>* takeinput(){
+    int rootdata;
+    cout<<"enter the data of node: ";
+    cin>>rootdata;
+    treenode<int>* root = new treenode<int>(rootdata);
+    int n;
+    cout<<"enter no. of child: ";
+    cin>>n;
+    for(int i=0;i<n;i++){
+        treenode<int>* child=takeinput();
+        root->children.push_back(child);
+    }
+    return root;
+}
+void printlevelwise(treenode<int>* root){
+    if(root==NULL){
+        return ;
+    }
+    queue<treenode<int>*> levelw;
+    levelw.push(root);
+    while(levelw.size()!=0){
+        treenode<int>* temp=levelw.front();
+        levelw.pop();
+        cout<<temp->data<<": ";
+        for(int i=0l;i<temp->children.size();i++){
+            cout<<temp->children[i]->data<<", ";
+            levelw.push(temp->children[i]);
+        }
+        cout<<endl;
+    }
+}
+void printtree(treenode<int>* root){
+    if(root==NULL){
+        return ;
+    }
+    cout<<root->data<<": ";
+    for(int i=0;i<root->children.size();i++){
+        cout<< root->children[i]->data<<", ";
+    }
+    cout<<endl;
+    for(int i=0;i<root->children.size();i++){
+        printtree(root->children[i]);
+    }
+}
+int countnode(treenode<int>* root){
+    int ans=1;
+    for(int i=0;i<root->children.size();i++){
+        ans+=countnode(root->children[i]);
+    }
+    return ans;
+}
+// int height(treenode<int>* root,int p){
+//     if(root==NULL){
+//         return 0;
+//     }
+//     if(root->children.size()==0){
+//         return p;
+//     }
+//     int maxheight=1,treeheight;
+//     for(int i=0;i<root->children.size();i++){
+//         maxheight= max(maxheight,height(root->children[i],p+1))+1;
+//     }
+//     // if(root->children.size()==0){
+//     //     treeheight=1;
+//     // }
+//     // maxheight= max(maxheight, treeheight)+1;
+//     return maxheight;
+// }
+void printatk(treenode<int>* root, int k){
+    if(root==NULL){
+        return;
+    }
+    if(k==0){
+        cout<<root->data<<"  ";
+    }
+    for(int i=0;i<root->children.size();i++){
+        printatk(root->children[i],k-1);
+    }
+}
+int leafnode(treenode<int>* root){
+    if(root->children.size()==0){
+        return 1;
+    }
+    int ans=0;
+    for(int i=0;i<root->children.size();i++){
+        ans+=leafnode(root->children[i]);
+    }
+    return ans;
+}
+void preorder(treenode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    cout<<root->data<<" ";
+    for(int i=0;i<root->children.size();i++){
+        preorder(root->children[i]);
+    }
+}
+void postorder(treenode<int>* root){
+    if(root==NULL){
+        return;
+    }
+    for(int i=0;i<root->children.size();i++){
+        postorder(root->children[i]);
+    }
+    cout<<root->data<<" ";
+}
+int main() {
+    // Write C++ code here
+    /*
+    treenode<int>* root = new treenode<int>(1);
+    treenode<int>* node1 = new treenode<int>(2);
+    treenode<int>* node2 = new treenode<int>(3);
+    root->children.push_back(node1);
+    root->children.push_back(node2);
+    */
+    treenode<int>* root=takeinputlevelwise();
+    printtree(root);
+    cout<<endl;
+    printlevelwise(root);
+    cout<<"the number of nodes are: "<<countnode(root)<<endl;
+    // cout<<"the height of the tree: "<<height(root)<<endl;
+    printatk(root,2);
+    cout<<endl;
+    cout<<"no. of leaf node: "<<leafnode(root)<<endl;
+    preorder(root);
+    cout<<endl;
+    postorder(root);
+    delete root;
+    cout<<"deleted"<<endl;
+    preorder(root);
+    return 0;
+}

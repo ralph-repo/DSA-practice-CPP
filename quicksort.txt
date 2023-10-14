@@ -1,0 +1,79 @@
+// Online C++ compiler to run C++ program online
+#include <bits/stdc++.h>
+using namespace std;
+int partition(int arr1[], int arr2[], int s, int e){
+    cout<<"array before partition is:"<<endl;
+    for(int i=0;i<52;i++){
+        cout<<arr1[i]<<" ";
+    }
+    cout<<endl;
+        int pivot=arr1[s];
+        cout<<"the  pivot element is "<<pivot<<endl;
+        int cnt=0;
+        cout<<"s = "<<s<<"e = "<<e<<endl;
+        for(int i=s+1;i<=e;i++){
+            if(arr1[i]>pivot){
+                cnt++;
+            }
+        }
+        cout<<"cnt is "<<cnt<<endl;
+        int pivotIndex=s+cnt;
+        swap(arr1[pivotIndex], arr1[s]);
+        swap(arr2[pivotIndex], arr2[s]);
+        int i=s, j=e;
+        while(i<pivotIndex && j>pivotIndex){
+            while(arr1[i]>=pivot){
+                i++;
+            }
+            while(arr1[j]<=pivot){
+                j--;
+            }
+            if(i<pivotIndex && j>pivotIndex){
+                swap(arr1[i], arr1[j]);
+                swap(arr2[i], arr2[j]);
+                i++; j--;
+            }
+        }
+    cout<<"array after partition is:"<<endl;
+    for(int i=0;i<52;i++){
+        cout<<arr1[i]<<" ";
+    }
+    cout<<endl;
+        return pivotIndex;
+    }
+    void quickSort(int arr1[], int arr2[], int s, int e){
+        if(s>=e){
+            return;
+        }
+        int p = partition(arr1, arr2, s, e);
+        quickSort(arr1, arr2, s, p-1);
+        quickSort(arr1, arr2, p+1, e);
+    }
+int main() {
+    // Write C++ code here
+    string s="tree";
+    // int arr[]={9,3,7,5, 6, 182, 345, 347, 23,9,7};
+    // quickSort(arr, 0, 10);
+    // for(int i=0;i<11;i++){
+    //     cout<<arr[i]<<"  ";
+    // }
+    int arr1[52], arr2[52];
+    for(int i=0;i<52;i++){
+        arr1[i]=0;
+        arr2[i]=i+1;
+        // cout<<arr[i][0]<<"  "<<arr[i][1]<<endl;
+    }
+    for(int i=0;i<s.size();i++){
+        int at=s[i]-'a';
+        arr1[at]++;
+    }
+    for(int i=0;i<52;i++){
+        cout<<arr1[i]<<"  "<<arr2[i]<<endl;
+    }
+    cout<<endl;
+    quickSort(arr1, arr2, 0, 52-1);
+    for(int i=0;i<52;i++){
+        cout<<arr1[i]<<"  "<<arr2[i]<<endl;
+    }
+    cout<<"finished"<<endl;
+}
